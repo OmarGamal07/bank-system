@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Contracts\Validation\Validator;
 class StoreTransferRequest extends FormRequest
 {
     /**
@@ -11,7 +11,7 @@ class StoreTransferRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,6 +23,21 @@ class StoreTransferRequest extends FormRequest
     {
         return [
             //
+            'sender' => 'required|string|max:255',
+            'receiver' => 'required|string|max:255',
+            'type_id' => 'required|exists:types,id',
+            'bank_id' => 'required|exists:banks,id',
+            'mount' => 'required|numeric|min:0',
+            'dateTransfer' => 'nullable|date',
+            'numberAccount' => 'required|string|max:255',
+            'numberOperation' => 'required|string|unique:transfers,numberOperation',
         ];
+    }
+    public  function  failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors()->all();
+        return redirect()->route('transfers.createtransfer')
+            ->withInput()
+            ->withErrors($errors);
     }
 }

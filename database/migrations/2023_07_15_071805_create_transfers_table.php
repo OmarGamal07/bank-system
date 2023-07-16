@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('mount',10,2)->default(0);
             $table->date('dateTransfer')->nullable();
             $table->string('numberAccount');
+            $table->string('numberOperation')->unique();
             $table->enum('status',['accept','reject'])->default('accept');
             $table->timestamps();
         });

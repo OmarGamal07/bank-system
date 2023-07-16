@@ -19,6 +19,7 @@ class Transfer extends Model
         'mount',
         'dateTransfer',
         'numberAccount',
+        'numberOperation',
     ];
     function sender()
     {
