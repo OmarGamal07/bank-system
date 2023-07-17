@@ -23,6 +23,14 @@ class UpdateTransferRequest extends FormRequest
     {
         return [
             //
+            'status'=>'in:accept,reject'
         ];
+    }
+    public  function  failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors()->all();
+        return redirect()->route('transfers.createtransfer')
+            ->withInput()
+            ->withErrors($errors);
     }
 }

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('transfers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sender_id')->constrained()->cascadeOnUpdate()->onDelete('cascade');
-            $table->foreignId('receiver_id')->constrained()->cascadeOnUpdate()->onDelete('cascade');
+            $table->foreignId('sender_id')->constrained('clients')->cascadeOnUpdate()->onDelete('cascade');
+            $table->foreignId('receiver_id')->constrained('clients')->cascadeOnUpdate()->onDelete('cascade');
             $table->foreignId('type_id')->constrained()->cascadeOnUpdate()->onDelete('cascade');
             $table->foreignId('bank_id')->constrained()->cascadeOnUpdate()->onDelete('cascade');
             $table->decimal('mount',10,2)->default(0);

@@ -85,6 +85,8 @@ class TransferController extends Controller
     public function update(UpdateTransferRequest $request, Transfer $transfer)
     {
         //
+        $transfer->update($request->all());
+        return redirect()->route('transfers.show', $transfer->id);
     }
 
     /**
