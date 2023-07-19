@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TransferController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,10 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/add', function () {
-    return view('client.add');
-});
+Route::get('/add',[TransferController::class, 'create'])->name('transfer.create');
+Route::post('/storeTransfer',[TransferController::class, 'store'])->name('transfer.store');
+Route::get('/admin',[TransferController::class, 'index'])->name('transfer.index');
+Route::post('/filter',[TransferController::class, 'filter'])->name('transfer.filter');
+Route::get('/all-data', [TransferController::class, 'fetchAllData'])->name('all.data');
 
-Route::get('/admin', function () {
-    return view('admin.admin');
-});
+Route::get('/my-transfers',function (){
+    return view('client.transfers');
+})->name('client.transfers');
