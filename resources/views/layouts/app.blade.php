@@ -53,5 +53,6 @@
         @yield('content')
     </div>
 </div>
+@include('sweetalert::alert')
 </body>
 </html>

@@ -8,6 +8,9 @@ use App\Http\Requests\UpdateTransferRequest;
 use App\Models\Bank;
 use App\Models\Client;
 use App\Models\Type;
+use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 class TransferController extends Controller
 {
@@ -20,7 +23,25 @@ class TransferController extends Controller
         $transfers = Transfer::with(['sender', 'receiver'])->get();
         $countTransfer=Transfer::count();
         $totalMount = Transfer::sum('mount');
-        return view('transfers.transfer_index', ['transfers'=>$transfers,'countTransfer'=>$countTransfer,'totalMount'=>$totalMount]);
+        $clients = Client::all();
+        $banks = Bank::all();
+        $types = Type::all();
+        return view('admin.admin', ['transfers'=>$transfers,'countTransfer'=>$countTransfer,'totalMount'=>$totalMount,'clients'=>$clients,'banks'=>$banks,'types'=>$types]);
+    }
+
+    public function fetchAllData()
+    {
+        // Fetch all data from the database (assuming you want all data without any filters)
+        $allData = Transfer::with(['sender', 'receiver', 'bank', 'type'])->get();
+        $countTransfer=Transfer::count();
+        $totalMount = Transfer::sum('mount');
+        $response = [
+            'transfers' => $allData,
+            'countTransfer' => $countTransfer,
+            'totalMount' => $totalMount,
+        ];
+
+        return response()->json($response);
     }
 
     /**
@@ -31,7 +52,7 @@ class TransferController extends Controller
         //
         $types = Type::all();
         $banks = Bank::all();
-        return view('transfers.createtransfer', ['types'=>$types,'banks'=>$banks]);
+        return view('client.add', ['types'=>$types,'banks'=>$banks]);
     }
 
     /**
@@ -43,24 +64,26 @@ class TransferController extends Controller
         $numberOperation = $request->input('numberOperation');
         $existingTransfer = Transfer::where('numberOperation', $numberOperation)->exists();
         if ($existingTransfer) {
-            return view('transfers.createtransfer', ['errors' => $request->input('sender') . ' العملية مُسجلة من قبل']);
+            Alert::error('الحواله مدخله سابقا',' من '.$request->input('sender'));
+            return redirect()->back()->withInput($request->all());
         }
-    
+
         // Find or create the sender client
         $sender = Client::firstOrCreate(['name' => $request->input('sender')], ['role' => 'sender']);
-    
+
         // Find or create the receiver client
         $receiver = Client::firstOrCreate(['name' => $request->input('receiver')], ['role' => 'receiver']);
-    
+
         // Prepare the data for creating the transfer
-        $data = $request->only(['numberAccount', 'mount', 'type_id', 'bank_id', 'dateTransfer']);
+        $data = $request->only(['numberAccount','numberOperation', 'mount', 'type_id', 'bank_id', 'dateTransfer']);
         $data['sender_id'] = $sender->id;
-        $data['receiver_id'] = $receiver->id;   
-    
+        $data['receiver_id'] = $receiver->id;
+
         // Create the transfer
         Transfer::create($data);
-    
-        return redirect()->route('transfers.index');  
+        Alert::success('تم حفظ الحواله بنجاح');
+
+        return redirect()->route('transfer.index')->with('success', 'تمت الاضافة بنجاح');
     }
 
     /**
@@ -137,7 +160,14 @@ class TransferController extends Controller
 
         // Eager load related models (sender, receiver, bank, and type) to reduce queries
         $transfers = $query->with(['sender', 'receiver', 'bank', 'type'])->get();
+        $countTransfer = $query->count();
+        $totalMount = $query->sum('mount');
+        $response = [
+            'transfers' => $transfers,
+            'countTransfer' => $countTransfer,
+            'totalMount' => $totalMount,
+        ];
 
-        return view('transfers.transfer_index', ['transfers' => $transfers]);
+        return response()->json($response);
     }
 }
