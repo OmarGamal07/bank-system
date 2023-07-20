@@ -105,12 +105,14 @@ class TransferController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTransferRequest $request, Transfer $transfer)
+    public function update(Request $request)
     {
         //
-        $transfer->update($request->all());
-        return redirect()->route('transfers.show', $transfer->id);
-    }
+        $id = $request->input('id');
+        $status = $request->input('status');
+
+        Transfer::where('id',$id)->update(['status'=>$status]);
+        return response()->json(['success' => true]);    }
 
     /**
      * Remove the specified resource from storage.

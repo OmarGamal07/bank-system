@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Bank;
 use App\Http\Requests\StoreBankRequest;
 use App\Http\Requests\UpdateBankRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class BankController extends Controller
 {
@@ -27,9 +29,23 @@ class BankController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreBankRequest $request)
+    public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'national_id' => 'required|string|max:255',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()]);
+        }
+
+        $bank = new Bank();
+        $bank->name = $request->input('name');
+        $bank->nationalID = $request->input('national_id');
+        $bank->save();
+
+        return response()->json(['message' => 'Bank data saved successfully.']);
+
     }
 
     /**

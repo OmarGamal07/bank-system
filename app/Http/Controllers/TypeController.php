@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Type;
 use App\Http\Requests\StoreTypeRequest;
 use App\Http\Requests\UpdateTypeRequest;
+use Illuminate\Support\Facades\Validator;
 
 class TypeController extends Controller
 {
@@ -29,7 +30,18 @@ class TypeController extends Controller
      */
     public function store(StoreTypeRequest $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()]);
+        }
+
+        $type = new Type();
+        $type->name = $request->input('name');
+        $type->save();
+
+        return response()->json(['message' => 'Type data saved successfully.']);
     }
 
     /**
