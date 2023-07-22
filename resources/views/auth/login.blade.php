@@ -7,12 +7,12 @@
             <div class="card">
                 <div class="card-header bg-primary text-light fs-4 text-center fw-bold">تسجيل دخول</div>
 
-                <div class="card-body mt-5">
+                <div class="card-body my-5">
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">البريد الالكتروني</label>
+                        <div class="row mb-3 justify-content-center">
+                            <label for="email" class="col-md-2 col-form-label text-md-end">البريد الالكتروني</label>
 
                             <div class="col-md-6">
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
@@ -25,8 +25,8 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">كلمة المرور</label>
+                        <div class="row mb-3 justify-content-center">
+                            <label for="password" class="col-md-2 col-form-label text-md-end">كلمة المرور</label>
 
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
@@ -40,18 +40,12 @@
                         </div>
 
 
-                        <div class="row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    تسجيل دخول
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        نسيت كلمة المرور؟
-                                    </a>
-                                @endif
-                            </div>
+                        <div class="row justify-content-center">
+                               <div class="col-md-6">
+                                   <button type="submit" class="btn w-100 btn-primary">
+                                       تسجيل دخول
+                                   </button>
+                               </div>
                         </div>
                     </form>
                 </div>

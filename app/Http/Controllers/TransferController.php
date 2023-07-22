@@ -29,6 +29,18 @@ class TransferController extends Controller
         return view('admin.admin', ['transfers'=>$transfers,'countTransfer'=>$countTransfer,'totalMount'=>$totalMount,'clients'=>$clients,'banks'=>$banks,'types'=>$types]);
     }
 
+    public function clientTransfers()
+    {
+        //
+        $transfers = Transfer::with(['sender', 'receiver'])->get();
+        $countTransfer=Transfer::count();
+        $totalMount = Transfer::sum('mount');
+        $clients = Client::all();
+        $banks = Bank::all();
+        $types = Type::all();
+        return view('client.transfers', ['transfers'=>$transfers,'countTransfer'=>$countTransfer,'totalMount'=>$totalMount,'clients'=>$clients,'banks'=>$banks,'types'=>$types]);
+    }
+
     public function fetchAllData()
     {
         // Fetch all data from the database (assuming you want all data without any filters)

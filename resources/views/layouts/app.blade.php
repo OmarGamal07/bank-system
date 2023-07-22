@@ -54,13 +54,13 @@
                 @guest
                     @if (Route::has('login'))
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">تسجيل دخول</a>
+                            <a class="nav-link" href="{{ route('login') }}"> دخول</a>
                         </li>
                     @endif
 
                     @if (Route::has('register'))
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">خروج</a>
+                            <a class="nav-link" href="{{ route('register') }}">تسجيل</a>
                         </li>
                     @endif
                 @else
@@ -69,11 +69,11 @@
                             {{ Auth::user()->name }}
                         </a>
 
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                {{ __('Logout') }}
+                                تسجيل خروج
                             </a>
 
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -86,7 +86,7 @@
         </div>
     </div>
 </nav>
-    <div id="app" class="container">
+    <div id="app" class="container-fluid">
         <main class="py-4">
             @yield('content')
         </main>
