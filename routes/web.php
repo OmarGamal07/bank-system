@@ -22,7 +22,8 @@ Route::get('/admin',[TransferController::class, 'index'])->name('transfer.index'
 Route::post('/filter',[TransferController::class, 'filter'])->name('transfer.filter');
 Route::get('/all-data', [TransferController::class, 'fetchAllData'])->name('all.data');
 Route::post('/updateStatus', [TransferController::class, 'update'])->name('update.status');
-
+Route::get('transfers-export',[TransferController::class, 'export'])->name('transfers.export');
+Route::post('transfers-import',[TransferController::class,'import'])->name('transfers.import');
 
 Route::post('/save-bank',[BankController::class,'store'])->name('bank.store');
 Route::post('/save-type',[TypeController::class,'store'])->name('type.store');

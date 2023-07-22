@@ -10,8 +10,9 @@ use App\Models\Client;
 use App\Models\Type;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
-
-
+use App\Exports\TransfersExport;
+use App\Imports\TransfersImport;
+use Maatwebsite\Excel\Facades\Excel;
 class TransferController extends Controller
 {
     /**
@@ -171,5 +172,23 @@ class TransferController extends Controller
         ];
 
         return response()->json($response);
+    }
+    /**
+    * @return \Illuminate\Support\Collection
+    */
+    public function export() 
+    {
+        return Excel::download(new TransfersExport, 'transfers.xlsx');
+        Alert::success('تم تحميل الحوالات بنجاح');
+    }
+       
+    /**
+    * @return \Illuminate\Support\Collection
+    */
+    public function import() 
+    {
+        Excel::import(new TransfersImport,request()->file('file'));
+        Alert::success('تم حفظ الحوالات بنجاح');
+        return back();
     }
 }
