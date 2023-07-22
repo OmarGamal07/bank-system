@@ -124,7 +124,10 @@
                 </button>
             </div>
         </div>
-        <table class="table" id="dataTable">
+        @if($transfers->isEmpty())
+            <p class="text-center fs-3 text-danger mt-5">لا توجد بيانات</p>
+        @else
+            <table class="table table-responsive" id="dataTable">
             <thead>
             <tr>
                 <th>رقم العملية</th>
@@ -160,11 +163,11 @@
             </tbody>
         </table>
         <button class="btn border-primary bg-primary btn-primary w-100 my-3" id="update-btn">حفظ</button>
+        @endif
     </div>
 
 
     <style>
-        /* إضافة الأنماط المطلوبة بالـ CSS */
         th{
             border-radius: 4px;
             border: 1px solid limegreen;
@@ -175,7 +178,6 @@
             border: 1px solid #e1e1e1;
             text-align: center;
             vertical-align: middle;
-
         }
         table {
             border-collapse: separate;
@@ -214,31 +216,37 @@
                     },
                     success: function (response) {
                         var transfers = response.transfers;
-                        // Clear the existing table data
-                        $('#dataTable tbody').empty();
+                       if(transfers.length > 0){
+                           // Clear the existing table data
+                           $('#dataTable tbody').empty();
 
-                        // Append the filtered data to the table
-                        $.each(transfers, function (index, transfer) {
-                            var newRow = '<tr data-id="' + transfer.id + '">' +
-                                '<td>' + (index + 1) + '</td>' +
-                                '<td>' + transfer.type.name + '</td>' +
-                                '<td>' + transfer.mount + '</td>' +
-                                '<td>' + transfer.dateTransfer + '</td>' +
-                                '<td>' + transfer.sender.name + '</td>' +
-                                '<td>' + transfer.bank.name + '</td>' +
-                                '<td>' + transfer.numberAccount + '</td>' +
-                                '<td>' + transfer.receiver.name + '</td>' +
-                                '<td>' +
-                                '<select class="form-select border-0 status-select" id="status">' +
-                                '<option value="accept" ' + (transfer.status === 'accept' ? 'selected' : '') + ' class="text-success">قبول</option>' +
-                                '<option value="reject" ' + (transfer.status === 'reject' ? 'selected' : '') + ' class="text-danger">رفض</option>' +
-                                '</select>' +
-                                '</td>' +
-                                // Add other columns here
-                                '</tr>';
+                           // Append the filtered data to the table
+                           $.each(transfers, function (index, transfer) {
+                               var newRow = '<tr data-id="' + transfer.id + '">' +
+                                   '<td>' + (index + 1) + '</td>' +
+                                   '<td>' + transfer.type.name + '</td>' +
+                                   '<td>' + transfer.mount + '</td>' +
+                                   '<td>' + transfer.dateTransfer + '</td>' +
+                                   '<td>' + transfer.sender.name + '</td>' +
+                                   '<td>' + transfer.bank.name + '</td>' +
+                                   '<td>' + transfer.numberAccount + '</td>' +
+                                   '<td>' + transfer.receiver.name + '</td>' +
+                                   '<td>' +
+                                   '<select class="form-select border-0 status-select" id="status">' +
+                                   '<option value="accept" ' + (transfer.status === 'accept' ? 'selected' : '') + ' class="text-success">قبول</option>' +
+                                   '<option value="reject" ' + (transfer.status === 'reject' ? 'selected' : '') + ' class="text-danger">رفض</option>' +
+                                   '</select>' +
+                                   '</td>' +
+                                   // Add other columns here
+                                   '</tr>';
 
-                            $('#dataTable tbody').append(newRow);
-                        });
+                               $('#dataTable tbody').append(newRow);
+                           });
+                       }
+                       else {
+                           $('#dataTable tbody').html('<tr><td colspan="9" class="text-center fs-3 text-danger mt-5">لا توجد بيانات</td></tr>');
+                           $('#update-btn').hide();
+                       }
                         $('#transferCount').text(response.countTransfer);
                         $('#totalAmount').text(response.totalMount);
                     },
@@ -256,27 +264,33 @@
                     url: '{{ route("all.data") }}', // Replace with the appropriate route for fetching all data
                     type: 'GET',
                     success: function (response) {
-                        // Clear the existing table data
-                        $('#dataTable tbody').empty();
-                        $.each(response.transfers, function (index, transfer) {
-                            var newRow = '<tr data-id="' + transfer.id + '">' +
-                                '<td>' + (index + 1) + '</td>' +
-                                '<td>' + transfer.type.name + '</td>' +
-                                '<td>' + transfer.mount + '</td>' +
-                                '<td>' + transfer.dateTransfer + '</td>' +
-                                '<td>' + transfer.sender.name + '</td>' +
-                                '<td>' + transfer.bank.name + '</td>' +
-                                '<td>' + transfer.numberAccount + '</td>' +
-                                '<td>' + transfer.receiver.name + '</td>' +
-                                '<td>' +
-                                '<select class="form-select border-0 status-select" id="status">' +
-                                '<option value="accept" ' + (transfer.status === 'accept' ? 'selected' : '') + ' class="text-success">قبول</option>' +
-                                '<option value="reject" ' + (transfer.status === 'reject' ? 'selected' : '') + ' class="text-danger">رفض</option>' +
-                                '</select>' +
-                                '</td>' +
-                                '</tr>';
-                            $('#dataTable tbody').append(newRow);
-                        });
+                        if(response.transfers.length > 0){
+                            // Clear the existing table data
+                            $('#dataTable tbody').empty();
+                            $.each(response.transfers, function (index, transfer) {
+                                var newRow = '<tr data-id="' + transfer.id + '">' +
+                                    '<td>' + (index + 1) + '</td>' +
+                                    '<td>' + transfer.type.name + '</td>' +
+                                    '<td>' + transfer.mount + '</td>' +
+                                    '<td>' + transfer.dateTransfer + '</td>' +
+                                    '<td>' + transfer.sender.name + '</td>' +
+                                    '<td>' + transfer.bank.name + '</td>' +
+                                    '<td>' + transfer.numberAccount + '</td>' +
+                                    '<td>' + transfer.receiver.name + '</td>' +
+                                    '<td>' +
+                                    '<select class="form-select border-0 status-select" id="status">' +
+                                    '<option value="accept" ' + (transfer.status === 'accept' ? 'selected' : '') + ' class="text-success">قبول</option>' +
+                                    '<option value="reject" ' + (transfer.status === 'reject' ? 'selected' : '') + ' class="text-danger">رفض</option>' +
+                                    '</select>' +
+                                    '</td>' +
+                                    '</tr>';
+                                $('#dataTable tbody').append(newRow);
+                            });
+                        }
+                        else {
+                            $('#dataTable tbody').html('<tr><td colspan="2" class="text-center fs-3 text-danger mt-5">لا توجد بيانات</td></tr>');
+                            $('#update-btn').hide();
+                        }
                         $('#transferCount').text(response.countTransfer);
                         $('#totalAmount').text(response.totalMount);
                     },
