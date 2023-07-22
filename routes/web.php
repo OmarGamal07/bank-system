@@ -3,6 +3,7 @@
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\TransferController;
 use App\Http\Controllers\TypeController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,7 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/add',[TransferController::class, 'create'])->name('transfer.create');
+    Route::get('/addaccount',[UserController::class, 'create'])->name('account.create');
     Route::get('/admin',[TransferController::class, 'index'])->name('transfer.index');
     Route::post('/storeTransfer',[TransferController::class, 'store'])->name('transfer.store');
     Route::post('/filter',[TransferController::class, 'filter'])->name('transfer.filter');

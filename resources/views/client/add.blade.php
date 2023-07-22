@@ -17,18 +17,32 @@
                 عملية ايداع جديدة
                 <i class="fa-solid fa-plus"></i>
             </a>
-            <div>
-                <a type="button"  class="btn border" href="{{route('client.transfers')}}">حوالاتي</a>
-                <button class="btn border">
-                    <i class="fa-solid fa-print"></i>
-                </button>
-                <button class="btn border">
-                    <i class="fa-solid fa-upload"></i>
-                </button>
-                <button class="btn border">
-                    <i class="fa-solid fa-download"></i>
-                </button>
-            </div>
+            <div style="display: flex; align-items: center;">
+    <!-- <a type="button" class="btn border" href="{{ route('client.transfers') }}">حوالاتي</a> -->
+    @auth
+    @if(auth()->user()->role === 'Admin')
+        <a type="button" class="btn border" href="{{ route('transfer.index') }}">الحوالات</a>
+    @else
+        <a type="button" class="btn border" href="{{ route('client.transfers') }}">حوالاتي</a>
+    @endif
+@endauth
+    <button class="btn border" style="margin-right: 10px;">
+        <i class="fa-solid fa-print"></i>
+    </button>
+    <span style="flex: 1;margin-right: 10px;">
+        <form id="importForm" action="{{ route('transfers.import') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <label for="fileInput" class="custom-file-upload">
+                <i class="fa-solid fa-upload"></i>
+            </label>
+            <input type="file" id="fileInput" name="file" class="form-control">
+        </form>
+    </span>
+    <a href="{{ route('transfers.export') }}"> <button class="btn border"  style="margin-right: 10px;">
+        <i class="fa-solid fa-download"></i>
+    </button></a>
+</div>
+
         </div>
     </div>
 

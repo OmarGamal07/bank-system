@@ -13,10 +13,6 @@
     <div class="container">
         <form id="filterForm" method="GET" action="{{route('transfer.filter')}}">
             <div class="form row py-5">
-                <a type="button" href="{{route('transfer.create')}}" class="btn col add border text-danger">
-                    عملية ايداع جديدة
-                    <i class="fa-solid fa-plus"></i>
-                </a>
                 <div class="col">
                     <input type="text" name="from_date" class="form-control" onfocus="(this.type = 'date')" placeholder="من تاريخ">
                 </div>
@@ -32,9 +28,9 @@
                     <button class="btn mx-2" id="printTable">
                         <i class="fa-solid fa-print"></i>
                     </button>
-                    <button class="btn mx-2">
+                    <!-- <a href="{{ route('transfers.export') }}"> <button class="btn border"  style="margin-right: 10px;">
                         <i class="fa-solid fa-download"></i>
-                    </button>
+                    </button></a> -->
                 </div>
             </div>
         </form>

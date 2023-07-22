@@ -13,6 +13,8 @@ use RealRashid\SweetAlert\Facades\Alert;
 use App\Exports\TransfersExport;
 use App\Imports\TransfersImport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
+
 class TransferController extends Controller
 {
     /**
@@ -33,7 +35,17 @@ class TransferController extends Controller
     public function clientTransfers()
     {
         //
-        $transfers = Transfer::with(['sender', 'receiver'])->get();
+        $authenticatedUserName = Auth::user()->name;
+        $transfers = Transfer::with(['sender', 'receiver'])
+        ->where(function ($query) use ($authenticatedUserName) {
+            $query->whereHas('sender', function ($query) use ($authenticatedUserName) {
+                $query->where('name', $authenticatedUserName);
+            })->orWhereHas('receiver', function ($query) use ($authenticatedUserName) {
+                $query->where('name', $authenticatedUserName);
+            });
+        })
+        ->where('status', 'accept')
+        ->get();
         $countTransfer=Transfer::count();
         $totalMount = Transfer::sum('mount');
         $clients = Client::all();

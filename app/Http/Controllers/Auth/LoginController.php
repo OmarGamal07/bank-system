@@ -23,7 +23,7 @@ class LoginController extends Controller
         $user = Auth::user();
         if ($user->role == "Client") {
             return '/my-transfers';
-        } elseif ($user->role == "Admin") {
+        } elseif ($user->role == "Admin"||$user->role == "Account") {
             return '/admin';
         }
 

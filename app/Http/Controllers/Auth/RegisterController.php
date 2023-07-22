@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class RegisterController extends Controller
 {
@@ -57,9 +58,11 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'role' => "Admin",
+            'role' => $data['role']?"Account":"Client",
             'password' => Hash::make($data['password']),
         ]);
+
+        
     }
 
     /**
@@ -71,7 +74,9 @@ class RegisterController extends Controller
      */
     protected function registered(Request $request, $user)
     {
-        // No need for this method, we are handling redirection in the redirectTo method.
+        if ($user->role === 'Account') {
+            Alert::success('تم انشاء المحاسب بنجاح');
+        }
     }
 
     /**
@@ -84,10 +89,15 @@ class RegisterController extends Controller
         // Check the user's role and redirect accordingly
         if (Auth::user()->role === 'Client') {
             return '/my-transfers';
-        } elseif (auth()->user()->role === 'Admin') {
+        } elseif (auth()->user()->role === 'Account') {
+            Alert::success('تم انشاء المحاسب بنجاح');
+            return '/admin';
+            
+        }elseif (auth()->user()->role === 'Admin') {
             return '/admin';
             
         }
+        
 
         // Default redirection if the user's role is not specified
         return RouteServiceProvider::HOME;
