@@ -4,6 +4,12 @@
 @endsection
 
 @section('content')
+    <div class="bg-info open d-flex align-items-baseline justify-content-between p-2">
+        <span class="search-text fw-bold me-2">محرك البحث</span>
+        <button class="btn border-0 search-button bg-info">
+            <i class="fa-solid arrow fs-4 border-0 fa-circle-chevron-down"></i>
+        </button>
+    </div>
     <div class="container mt-5">
         <!-- Modal Add bank -->
         <div class="modal fade" id="addBankModal" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addBankModalLabel" aria-hidden="true">
@@ -33,59 +39,6 @@
                 </div>
             </div>
         </div>
-        <!-- Modal Add type -->
-        <div class="modal fade" id="addTypeModal" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addTypeModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addTypeModalLabel">اصافة نوع عملية جديد</h5>
-                    </div>
-                    <div class="modal-body">
-                        <form id="addTypeForm">
-                            <div class="form-group my-3">
-                                <label for="typeNme">اسم العمليه</label>
-                                <input type="text" class="form-control" id="typeName" name="typeName">
-                                <small class="text-danger error-message" id="typeNameError"></small>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger bg-danger border-danger" id="closeSaveType">اغلاق</button>
-                        <button type="button" class="btn btn-success bg-success border-success" id="saveTypeBtn">حفظ العملية</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal Add bank -->
-        <div class="modal fade" id="addBankModal" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addBankModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addBankModalLabel">اصافة بنك جديد</h5>
-                    </div>
-                    <div class="modal-body">
-                        <form id="addBankForm">
-                            <div class="form-group my-3">
-                                <label for="bankName">اسم البنك</label>
-                                <input type="text" class="form-control" id="bankName" name="bankName">
-                                <small class="text-danger error-message" id="bankNameError"></small>
-                            </div>
-                            <div class="form-group">
-                                <label for="nationalId">الرقم التعريفي</label>
-                                <input type="text" class="form-control" id="nationalId" name="nationalId">
-                                <small class="text-danger error-message" id="nationalIdError"></small>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger bg-danger border-danger" id="closeSaveBank">اغلاق</button>
-                        <button type="button" class="btn btn-success bg-success border-success" id="saveBankBtn">حفظ البنك</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Modal Add type -->
         <div class="modal fade" id="addTypeModal" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addTypeModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -407,7 +360,6 @@
                         }
                     });
             });
-
             $("#closeSaveBank").on("click", function (){
                 $("#addBankModal").modal("hide");
                 $(".error-message").text("");
@@ -469,6 +421,16 @@
                 printWindow.document.close();
                 printWindow.print();
             }
+
+            $(".open").on("click", function() {
+                var icon = $(this).find("i");
+                if (icon.hasClass("fa-circle-chevron-down")) {
+                    icon.removeClass("fa-circle-chevron-down").addClass("fa-circle-chevron-up");
+                } else {
+                    icon.removeClass("fa-circle-chevron-up").addClass("fa-circle-chevron-down");
+                }
+                $("#filterForm").toggle();
+            });
         });
     </script>
 @endsection

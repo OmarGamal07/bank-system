@@ -40,9 +40,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/save-type',[TypeController::class,'store'])->name('type.store');
     Route::get('transfers-export',[TransferController::class, 'export'])->name('transfers.export');
     Route::post('transfers-import',[TransferController::class,'import'])->name('transfers.import');
-    Route::get('/my-transfers',function (){
-                return view('client.transfers');
-            })->name('client.transfers');
+    // Route::get('/my-transfers',function (){
+    //             return view('client.transfers');
+    //         })->name('client.transfers');
+
+    Route::get('/my-transfers',[TransferController::class, 'clientTransfers'])->name('client.transfers');
+
 });
 
 // >>>>>>> d728c1b8d585c6f157df5cf5e3dc98bd8609877d
