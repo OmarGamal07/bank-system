@@ -4,24 +4,33 @@
 @endsection
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mt-5">
-        <button type="button" class="btn add border text-danger">
-             عملية ايداع جديدة
-            <i class="fa-solid fa-plus"></i>
+    <div class="bg-info open d-flex align-items-baseline justify-content-between p-2">
+        <span class="search-text fw-bold me-2">نموذج اضافة حوالة</span>
+        <button class="btn search-button bg-info">
+            <i class="fa-solid arrow fs-4 border-0 fa-circle-chevron-down"></i>
         </button>
-        <div>
-            <a type="button"  class="btn border" href="{{route('client.transfers')}}">حوالاتي</a>
-            <button class="btn border">
-                <i class="fa-solid fa-print"></i>
-            </button>
-            <button class="btn border">
-                <i class="fa-solid fa-upload"></i>
-            </button>
-            <button class="btn border">
-                <i class="fa-solid fa-download"></i>
-            </button>
+    </div>
+    <div class=" container custom-div" style="display: block;">
+        <div class="d-flex custom-div justify-content-between align-items-center py-3">
+            <a type="button" href="{{route('transfer.create')}}" class="btn add border text-danger">
+                عملية ايداع جديدة
+                <i class="fa-solid fa-plus"></i>
+            </a>
+            <div>
+                <a type="button"  class="btn border" href="{{route('client.transfers')}}">حوالاتي</a>
+                <button class="btn border">
+                    <i class="fa-solid fa-print"></i>
+                </button>
+                <button class="btn border">
+                    <i class="fa-solid fa-upload"></i>
+                </button>
+                <button class="btn border">
+                    <i class="fa-solid fa-download"></i>
+                </button>
+            </div>
         </div>
     </div>
+
     <div class="container d-flex justify-content-center mt-5">
     <form method="POST" action="{{route('transfer.store')}}" class="border p-4 rounded">
         @csrf
@@ -105,6 +114,7 @@
     </div>
 
     <style>
+
         form{
             background: white;
         }
@@ -118,4 +128,19 @@
             color: white;
         }
     </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $(".open").on("click", function() {
+                var icon = $(this).find("i");
+                if (icon.hasClass("fa-circle-chevron-down")) {
+                    icon.removeClass("fa-circle-chevron-down").addClass("fa-circle-chevron-up");
+                } else {
+                    icon.removeClass("fa-circle-chevron-up").addClass("fa-circle-chevron-down");
+                }
+                $(".custom-div").toggle();
+            });
+        });
+    </script>
 @endsection

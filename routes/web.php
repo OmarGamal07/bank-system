@@ -26,9 +26,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/updateStatus', [TransferController::class, 'update'])->name('update.status');
     Route::post('/save-bank',[BankController::class,'store'])->name('bank.store');
     Route::post('/save-type',[TypeController::class,'store'])->name('type.store');
-    Route::get('/my-transfers',function (){
-        return view('client.transfers');
-    })->name('client.transfers');
+    Route::get('/my-transfers',[TransferController::class, 'clientTransfers'])->name('client.transfers');
 });
 
 
