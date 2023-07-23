@@ -29,7 +29,6 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        
         $this->middleware('guest');
     }
 
@@ -63,7 +62,7 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
 
-        
+
     }
 
     /**
@@ -93,12 +92,12 @@ class RegisterController extends Controller
         } elseif (auth()->user()->role === 'Account') {
             Alert::success('تم انشاء المحاسب بنجاح');
             return '/admin';
-            
+
         }elseif (auth()->user()->role === 'Admin') {
             return '/admin';
-            
+
         }
-        
+
 
         // Default redirection if the user's role is not specified
         return RouteServiceProvider::HOME;

@@ -23,7 +23,7 @@ class TransferController extends Controller
     public function index()
     {
         //
-        $transfers = Transfer::with(['sender', 'receiver'])->get();
+        $transfers = Transfer::with(['sender', 'receiver'])->orderByDesc('created_at')->get();
         $countTransfer=Transfer::count();
         $totalMount = Transfer::sum('mount');
         $clients = Client::all();
@@ -45,9 +45,10 @@ class TransferController extends Controller
             });
         })
         ->where('status', 'accept')
+            ->orderByDesc('created_at')
         ->get();
-        $countTransfer=Transfer::count();
-        $totalMount = Transfer::sum('mount');
+        $countTransfer=$transfers->count();
+        $totalMount = $transfers->sum('mount');
         $clients = Client::all();
         $banks = Bank::all();
         $types = Type::all();
@@ -57,7 +58,7 @@ class TransferController extends Controller
     public function fetchAllData()
     {
         // Fetch all data from the database (assuming you want all data without any filters)
-        $allData = Transfer::with(['sender', 'receiver', 'bank', 'type'])->get();
+        $allData = Transfer::with(['sender', 'receiver', 'bank', 'type'])->orderByDesc('created_at')->get();
         $countTransfer=Transfer::count();
         $totalMount = Transfer::sum('mount');
         $response = [
@@ -186,7 +187,7 @@ class TransferController extends Controller
         }
 
         // Eager load related models (sender, receiver, bank, and type) to reduce queries
-        $transfers = $query->with(['sender', 'receiver', 'bank', 'type'])->get();
+        $transfers = $query->with(['sender', 'receiver', 'bank', 'type'])->orderByDesc('created_at')->get();
         $countTransfer = $query->count();
         $totalMount = $query->sum('mount');
         $response = [
@@ -200,16 +201,16 @@ class TransferController extends Controller
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function export() 
+    public function export()
     {
         return Excel::download(new TransfersExport, 'transfers.xlsx');
         Alert::success('تم تحميل الحوالات بنجاح');
     }
-       
+
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function import() 
+    public function import()
     {
         Excel::import(new TransfersImport,request()->file('file'));
         Alert::success('تم حفظ الحوالات بنجاح');
