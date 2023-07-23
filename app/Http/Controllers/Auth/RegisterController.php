@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -8,20 +7,12 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
     use RegistersUsers;
 
     /**
@@ -67,7 +58,48 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'role' => $data['role']?"Account":"Client",
             'password' => Hash::make($data['password']),
         ]);
+
+        
+    }
+
+    /**
+     * The user has been registered.
+     *
+     * @param  Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function registered(Request $request, $user)
+    {
+        if ($user->role === 'Account') {
+            Alert::success('تم انشاء المحاسب بنجاح');
+        }
+    }
+
+    /**
+     * Get the redirect path based on the user's role after registration.
+     *
+     * @return string
+     */
+    protected function redirectTo()
+    {
+        // Check the user's role and redirect accordingly
+        if (Auth::user()->role === 'Client') {
+            return '/my-transfers';
+        } elseif (auth()->user()->role === 'Account') {
+            Alert::success('تم انشاء المحاسب بنجاح');
+            return '/admin';
+            
+        }elseif (auth()->user()->role === 'Admin') {
+            return '/admin';
+            
+        }
+        
+
+        // Default redirection if the user's role is not specified
+        return RouteServiceProvider::HOME;
     }
 }

@@ -9,6 +9,7 @@
         <button class="btn search-button bg-info">
             <i class="fa-solid arrow fs-4 border-0 fa-circle-chevron-down"></i>
         </button>
+
     </div>
     <div class=" container custom-div" style="display: block;">
         <div class="d-flex custom-div justify-content-between align-items-center py-3">
@@ -16,18 +17,32 @@
                 عملية ايداع جديدة
                 <i class="fa-solid fa-plus"></i>
             </a>
-            <div>
-                <a type="button"  class="btn border" href="{{route('client.transfers')}}">حوالاتي</a>
-                <button class="btn border">
-                    <i class="fa-solid fa-print"></i>
-                </button>
-                <button class="btn border">
-                    <i class="fa-solid fa-upload"></i>
-                </button>
-                <button class="btn border">
-                    <i class="fa-solid fa-download"></i>
-                </button>
-            </div>
+            <div style="display: flex; align-items: center;">
+    <!-- <a type="button" class="btn border" href="{{ route('client.transfers') }}">حوالاتي</a> -->
+    @auth
+    @if(auth()->user()->role === 'Admin')
+        <a type="button" class="btn border" href="{{ route('transfer.index') }}">الحوالات</a>
+    @else
+        <a type="button" class="btn border" href="{{ route('client.transfers') }}">حوالاتي</a>
+    @endif
+@endauth
+    <button class="btn border" style="margin-right: 10px;">
+        <i class="fa-solid fa-print"></i>
+    </button>
+    <span style="flex: 1;margin-right: 10px;">
+        <form id="importForm" action="{{ route('transfers.import') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <label for="fileInput" class="custom-file-upload">
+                <i class="fa-solid fa-upload"></i>
+            </label>
+            <input type="file" id="fileInput" name="file" class="form-control">
+        </form>
+    </span>
+    <a href="{{ route('transfers.export') }}"> <button class="btn border"  style="margin-right: 10px;">
+        <i class="fa-solid fa-download"></i>
+    </button></a>
+</div>
+
         </div>
     </div>
 
@@ -127,7 +142,26 @@
             background: #A45EE5;
             color: white;
         }
+        /* Hide the default file input */
+        input[type="file"] {
+            display: none;
+        }
+
+        /* Style the custom button to look like a regular button */
+        label.custom-file-upload {
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+
+        /* Optional: Add some hover effect */
+        label.custom-file-upload:hover {
+            background: #A45EE5;
+            color: white;
+        }
     </style>
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -142,5 +176,12 @@
                 $(".custom-div").toggle();
             });
         });
+        $(document).ready(function () {
+    // Listen for the change event on the file input
+    $('#fileInput').on('change', function () {
+        // Trigger form submission when a file is selected
+        $('#importForm').submit();
+    });
+});
     </script>
 @endsection

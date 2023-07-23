@@ -11,6 +11,7 @@
         </button>
     </div>
     <div class="container mt-5">
+    
         <!-- Modal Add bank -->
         <div class="modal fade" id="addBankModal" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addBankModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -43,10 +44,12 @@
         <div class="modal fade" id="addTypeModal" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addTypeModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
+                    
                     <div class="modal-header">
                         <h5 class="modal-title" id="addTypeModalLabel">اصافة نوع عملية جديد</h5>
                     </div>
                     <div class="modal-body">
+                        
                         <form id="addTypeForm">
                             <div class="form-group my-3">
                                 <label for="typeNme">اسم العمليه</label>
@@ -64,6 +67,18 @@
         </div>
 
         <form id="filterForm" method="GET" action="{{route('transfer.filter')}}">
+        <a type="button" href="{{route('transfer.create')}}" class="btn col add border text-danger">
+                    عملية ايداع جديدة
+                    <i class="fa-solid fa-plus"></i>
+                </a>
+                @auth
+    @if(auth()->user()->role === 'Admin')
+        <a type="button" href="{{ route('account.create') }}" class="btn col add border text-danger">
+            انشاء محاسب
+            <i class="fa-solid fa-plus"></i>
+        </a>
+    @endif
+@endauth
             <div class="form row my-5">
                 <div class="col">
                     <input type="text" name="from_date" class="form-control" onfocus="(this.type = 'date')" placeholder="من تاريخ">
@@ -119,9 +134,9 @@
                 <button class="btn mx-2" id="printTable">
                     <i class="fa-solid fa-print"></i>
                 </button>
-                <button class="btn mx-2">
-                    <i class="fa-solid fa-download"></i>
-                </button>
+                <a href="{{ route('transfers.export') }}"> <button class="btn border"  style="margin-right: 10px;">
+        <i class="fa-solid fa-download"></i>
+    </button></a>
             </div>
         </div>
         @if($transfers->isEmpty())

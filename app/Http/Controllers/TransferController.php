@@ -10,7 +10,10 @@ use App\Models\Client;
 use App\Models\Type;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
-
+use App\Exports\TransfersExport;
+use App\Imports\TransfersImport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
 
 class TransferController extends Controller
 {
@@ -32,7 +35,17 @@ class TransferController extends Controller
     public function clientTransfers()
     {
         //
-        $transfers = Transfer::with(['sender', 'receiver'])->get();
+        $authenticatedUserName = Auth::user()->name;
+        $transfers = Transfer::with(['sender', 'receiver'])
+        ->where(function ($query) use ($authenticatedUserName) {
+            $query->whereHas('sender', function ($query) use ($authenticatedUserName) {
+                $query->where('name', $authenticatedUserName);
+            })->orWhereHas('receiver', function ($query) use ($authenticatedUserName) {
+                $query->where('name', $authenticatedUserName);
+            });
+        })
+        ->where('status', 'accept')
+        ->get();
         $countTransfer=Transfer::count();
         $totalMount = Transfer::sum('mount');
         $clients = Client::all();
@@ -183,5 +196,23 @@ class TransferController extends Controller
         ];
 
         return response()->json($response);
+    }
+    /**
+    * @return \Illuminate\Support\Collection
+    */
+    public function export() 
+    {
+        return Excel::download(new TransfersExport, 'transfers.xlsx');
+        Alert::success('تم تحميل الحوالات بنجاح');
+    }
+       
+    /**
+    * @return \Illuminate\Support\Collection
+    */
+    public function import() 
+    {
+        Excel::import(new TransfersImport,request()->file('file'));
+        Alert::success('تم حفظ الحوالات بنجاح');
+        return back();
     }
 }

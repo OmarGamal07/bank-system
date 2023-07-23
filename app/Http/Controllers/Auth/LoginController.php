@@ -8,20 +8,8 @@ use Illuminate\Validation\ValidationException;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
     use AuthenticatesUsers;
 
     /**
@@ -29,7 +17,31 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/my-transfers';
+    protected function redirectTo()
+    {
+        // Check the user's role and redirect accordingly
+        $user = Auth::user();
+        if ($user->role == "Client") {
+            return '/my-transfers';
+        } elseif ($user->role == "Admin"||$user->role == "Account") {
+            return '/admin';
+        }
+
+        // Default redirection if the user's role is not specified
+        return RouteServiceProvider::HOME;
+    }
+
+    /**
+     * Get the post logout redirect path.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return string
+     */
+    protected function loggedOut(Request $request)
+    {
+        // Redirect to /login after logout
+        return view('auth.login');
+    }
 
     /**
      * Create a new controller instance.
