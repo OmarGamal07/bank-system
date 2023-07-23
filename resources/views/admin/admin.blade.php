@@ -173,6 +173,11 @@
                         <option value="reject" class="text-danger" {{ $transfer->status === 'reject' ? 'selected' : '' }}>رفض</option>
                     </select>
                 </td>
+                    @if (strtotime($transfer->created_at) >= strtotime('-30 minutes'))
+                    <td>
+                    <span class="new-label fw-bold" style="color: red;">جديد</span>
+                    </td>
+                    @endif
             </tr>
             @endforeach
             </tbody>
@@ -251,10 +256,11 @@
                                    '<option value="accept" ' + (transfer.status === 'accept' ? 'selected' : '') + ' class="text-success">قبول</option>' +
                                    '<option value="reject" ' + (transfer.status === 'reject' ? 'selected' : '') + ' class="text-danger">رفض</option>' +
                                    '</select>' +
-                                   '</td>' +
-                                   // Add other columns here
-                                   '</tr>';
-
+                                   '</td>' ;
+                               if (new Date(transfer.created_at).getTime() >= new Date() - 30 * 60 * 1000) {
+                                   newRow += '<td><span class="new-label fw-bold" style="color: red;">جديد</span></td>';
+                               }
+                               newRow += '</tr>';
                                $('#dataTable tbody').append(newRow);
                            });
                        }
@@ -297,8 +303,11 @@
                                     '<option value="accept" ' + (transfer.status === 'accept' ? 'selected' : '') + ' class="text-success">قبول</option>' +
                                     '<option value="reject" ' + (transfer.status === 'reject' ? 'selected' : '') + ' class="text-danger">رفض</option>' +
                                     '</select>' +
-                                    '</td>' +
-                                    '</tr>';
+                                    '</td>';
+                                if (new Date(transfer.created_at).getTime() >= new Date() - 30 * 60 * 1000) {
+                                    newRow += '<td><span class="new-label fw-bold" style="color: red;">جديد</span></td>';
+                                }
+                                newRow += '</tr>';
                                 $('#dataTable tbody').append(newRow);
                             });
                         }
