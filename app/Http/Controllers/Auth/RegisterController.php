@@ -55,14 +55,17 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $role = isset($data['role']) ? $data['role'] : null;
+        $roleValue = $role ? "Account" : "Client";
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'role' => $data['role']?"Account":"Client",
+            'role' => $roleValue,
             'password' => Hash::make($data['password']),
         ]);
 
-        
+
     }
 
     /**
@@ -92,12 +95,12 @@ class RegisterController extends Controller
         } elseif (auth()->user()->role === 'Account') {
             Alert::success('تم انشاء المحاسب بنجاح');
             return '/admin';
-            
+
         }elseif (auth()->user()->role === 'Admin') {
             return '/admin';
-            
+
         }
-        
+
 
         // Default redirection if the user's role is not specified
         return RouteServiceProvider::HOME;
