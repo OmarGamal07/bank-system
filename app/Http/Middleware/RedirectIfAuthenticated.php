@@ -23,17 +23,18 @@ class RedirectIfAuthenticated
     //    }
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                 // Get the authenticated user
-                 $user = Auth::guard($guard)->user();
+                //  // Get the authenticated user
+                //  $user = Auth::guard($guard)->user();
+                    
+                //  // Check the user's role
+                //  if ($user->role === 'Client') {
+                //      return redirect()->route('client.transfers');
+                // // return '/admin';
 
-                 // Check the user's role
-                 if ($user->role === 'Client') {
-                     return redirect()->route('client.transfers');
-                // return '/admin';
-
-                 } elseif ($user->role === 'Admin') {
-                     return redirect()->route('transfer.index');
-                 }
+                //  } elseif ($user->role === 'Admin') {
+                //      return redirect()->route('transfer.index');
+                //  }
+                return $next($request);
             }
         }
 
