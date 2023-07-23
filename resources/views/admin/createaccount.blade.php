@@ -63,9 +63,8 @@
                         <div class="row mb-3 justify-content-center">
                             <!-- <label for="email" class="col-md-2 col-form-label text-md-end"> النوع</label> -->
 
-                            <div class="col-md-6">
-                            <input id="role" type="text" name="role"  hidden value="Account" >
-                            </div>
+                         <input type="hidden" name="role" value="Account">
+                           
                                
                             </div>
                         </div>

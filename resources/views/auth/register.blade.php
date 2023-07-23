@@ -60,7 +60,8 @@
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                             </div>
                         </div>
-
+                         <!-- Add a hidden input field for 'role' -->
+                         <input type="hidden" name="role" value="Client">
                         <div class="row mb-0 justify-content-center">
                                 <div class="col-md-6">
                                     <button type="submit" class="btn w-100 btn-primary">
